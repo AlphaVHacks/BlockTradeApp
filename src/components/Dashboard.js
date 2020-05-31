@@ -68,6 +68,9 @@ class Dashboard extends React.Component {
         <div>
           {stockview}
           <button className="btn btn-outline-primary">Buy</button>
+          <br></br>
+          <br></br>
+          <button className="btn btn-outline-primary">Sell</button>
         </div>
       );
     }
