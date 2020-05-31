@@ -7,7 +7,7 @@ const alpha = require("alphavantage")({ key: "AJC1VXSOOGI1OS2K" });
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { symbol: "", currency: "USD", stockData: null };
+    this.state = { symbol: "", currency: "USD", stockData: null, showWallet: false };
   }
 
   onSubmit = (e) => {
@@ -97,6 +97,12 @@ class Dashboard extends React.Component {
       stockview = <p>No such stock symbol.</p>;
     } else if (stockData !== null) {
       stockview = <StockCard stockData={stockData} />;
+      let wallet;
+
+      if (this.state.showWallet) {
+        wallet = <App />
+      }
+
       return (
         <div style={{
           display: "flex",
@@ -121,12 +127,12 @@ class Dashboard extends React.Component {
             </select>
           </div>
           <br></br>
-          <button className="btn btn-outline-primary">Buy</button>
+          {wallet}
+          <button className="btn btn-outline-primary" onClick={(e) => this.setState({ showWallet: true })}>Buy</button>
           <br></br>
-          <button className="btn btn-outline-primary">Sell</button>
+          <button className="btn btn-outline-primary" onClick={(e) => this.setState({ showWallet: true })}>Sell</button>
           <br></br>
           <button className="btn" onClick={e => this.setState({ stockData: null })}>👈</button>
-          {/* <App /> */}
         </div>
       );
     } else {

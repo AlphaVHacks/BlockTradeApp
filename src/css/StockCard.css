@@ -1,5 +1,25 @@
 .StockCard {
-  width: 400px;
   /* border: 1px solid #ccc; */
   box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
-};
+  /* width: 300px; */
+}
+
+.CardContent {
+  padding: 10px 50px;
+}
+
+.CardLabel {
+  font-size: 10px;
+  color: rgba(0,0,0,0.5);
+  width: 50px;
+  float: left;
+  transform: translateY(5px);
+}
+
+.CardFocus {
+  font-size: 2em;
+}
+
+.CardPrices {
+  text-align: left !important;
+}

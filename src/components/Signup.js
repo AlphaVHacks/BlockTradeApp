@@ -6,10 +6,12 @@ class Signup extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { name: '', email: '', password: '', publicKey: '', toDashboard: false };
+    this.state = { name: '', email: '', password: '', publicKey: '', toDashboard: false, isSigningUp: false };
   }
 
   handleSubmit = (e) => {
+    this.setState({ isSigningUp: true });
+
     e.preventDefault();
     const formFilled = this.state.name !== '' && this.state.email !== '' && this.state.password !== '' && this.state.publicKey !== '';
 
@@ -30,7 +32,8 @@ class Signup extends React.Component {
           const userSamePublicKey = data.find(user => user.publicKey === publicKey);
 
           if (userSameEmail || userSamePublicKey) {
-            alert('user with these credentials already exists')
+            alert('user with these credentials already exists');
+            this.setState({ isSigningUp: false });
           } else {
             // create a new account
             const newUser = { name, email, password, publicKey }
@@ -54,16 +57,19 @@ class Signup extends React.Component {
 
                   // REDIRECT TO DASHBOARD
                   this.setState({ toDashboard: true });
+                  this.setState({ isSigningUp: false });
 
                 } else {
                   alert('server error - failed to create user');
                   console.log(res);
+                  this.setState({ isSigningUp: false });
                 }
               })
           }
         });
     } else {
-      alert('please complete the form')
+      alert('please complete the form');
+      this.setState({ isSigningUp: false });
     }
 
     // this.setState({ toDashboard: true })
@@ -78,6 +84,11 @@ class Signup extends React.Component {
   render() {
     if (this.state.toDashboard) {
       return <Redirect to="/dashboard" />
+    }
+
+    let showAuth;
+    if (this.state.isSigningUp) {
+      showAuth = <p style={{ marginTop: "15px" }}>Authenticating...</p>
     }
 
     return (
@@ -101,8 +112,9 @@ class Signup extends React.Component {
           </div>
           <button className="btn btn-outline-primary">Sign Up</button>
         </form>
+        {showAuth}
         <Link to="/">
-          <p>Already have an account? Log in here!</p>
+          <p style={{ marginTop: "10px" }}>Already have an account? Log in here!</p>
         </Link>
       </div>
     );

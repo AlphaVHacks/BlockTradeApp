@@ -6,10 +6,12 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '', toDashboard: false };
+    this.state = { email: '', password: '', toDashboard: false, isAuthenticating: false };
   }
 
   onSubmit = (e) => {
+    this.setState({ isAuthenticating: true });
+
     e.preventDefault();
     const formFilled = this.state.email !== '' && this.state.password !== '';
 
@@ -36,16 +38,19 @@ class Login extends React.Component {
 
             } else {
               // prompt wrong password
-              alert('incorrect password')
+              alert('incorrect password');
+              this.setState({ isAuthenticating: false });
             }
           } else {
             // prompt no such user
             alert('user doesnt exist');
+            this.setState({ isAuthenticating: false });
           }
         })
     } else {
       // prompt to fill form
       alert('please fill the form')
+      this.setState({ isAuthenticating: false });
     }
   }
 
@@ -62,6 +67,11 @@ class Login extends React.Component {
       return <Redirect to="/dashboard" />
     }
 
+    let showAuth;
+    if (this.state.isAuthenticating) {
+      showAuth = <p style={{ marginTop: "15px" }}>Authenticating...</p>
+    }
+
     return (
       <div className="Login">
         <form onSubmit={this.onSubmit}>
@@ -75,8 +85,9 @@ class Login extends React.Component {
           </div>
           <button className="btn btn-outline-primary">Login</button>
         </form>
+        {showAuth}
         <Link to="/signup">
-          <p>Not registered? Sign up here!</p>
+          <p style={{ marginTop: "10px" }}>Not registered? Sign up here!</p>
         </Link>
       </div>
     );
