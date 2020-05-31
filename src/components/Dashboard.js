@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
       stockview = <StockCard stockData={stockData} />;
       return (
         <div>
-          <div style={{ display: "grid", background: "#c4d6f5" }}>
+          <div style={{ display: "grid", background: "#a5d5fa" }}>
             {stockview}
           </div>
           <br></br>
