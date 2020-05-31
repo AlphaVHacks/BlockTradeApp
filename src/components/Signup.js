@@ -16,7 +16,7 @@ class Signup extends React.Component {
     if (formFilled) {
       const name = this.state.name;
       const email = this.state.email;
-      const password = sha256(this.state.password);
+      const password = this.state.password;
       const publicKey = this.state.publicKey;
 
       // check if email or publicKey is already in the DB
