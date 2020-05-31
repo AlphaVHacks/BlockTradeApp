@@ -114,6 +114,7 @@ class Dashboard extends React.Component {
             </select>
           </div>
           <button className="btn btn-outline-primary">Search</button>
+          <App />
         </form>
         {stockview}
       </div>
