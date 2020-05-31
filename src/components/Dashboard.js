@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import StockCard from "./StockCard";
+import App from "./App";
 const alpha = require("alphavantage")({ key: "AJC1VXSOOGI1OS2K" });
 
 class Dashboard extends React.Component {
