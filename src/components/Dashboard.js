@@ -26,7 +26,7 @@ class Dashboard extends React.Component {
             alpha.forex.rate(currency, "USD").then((exchangeData) => {
               const exchangeRate = Number(
                 exchangeData["Realtime Currency Exchange Rate"][
-                  "5. Exchange Rate"
+                "5. Exchange Rate"
                 ]
               );
 
@@ -56,6 +56,38 @@ class Dashboard extends React.Component {
     this.setState({ currency: e.target.value });
   };
 
+  onCurrencyChangeCurrentStock = (e) => {
+    const currency = e.target.value;
+
+    if (currency !== "USD") {
+      alpha.forex.rate(currency, "USD").then((exchangeData) => {
+        const exchangeRate = Number(
+          exchangeData["Realtime Currency Exchange Rate"][
+          "5. Exchange Rate"
+          ]
+        );
+
+        const currentStockData = this.state.stockData;
+        let newStockData;
+        if (currentStockData.altCurrency) {
+          newStockData = {
+            altCurrency: { currency, exchangeRate },
+            quote: currentStockData.quote
+          };
+        } else {
+          newStockData = {
+            altCurrency: { currency, exchangeRate },
+            quote: currentStockData
+          }
+        }
+
+        this.setState({ stockData: newStockData, currency: currency });
+      });
+    } else {
+      this.setState({ stockData: this.state.stockData.quote, currency: e.target.value });
+    }
+  };
+
   render() {
     let stockData = this.state.stockData;
     let stockview;
@@ -66,17 +98,19 @@ class Dashboard extends React.Component {
     } else if (stockData !== null) {
       stockview = <StockCard stockData={stockData} />;
       return (
-        <div>
-          <div style={{ display: "grid", background: "#a5d5fa" }}>
-            {stockview}
-          </div>
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+          {stockview}
           <br></br>
           <div>
             <select
               style={{ width: "250px" }}
               className="form-control"
               id="currency"
-              onChange={this.onCurrencyChange}
+              onChange={this.onCurrencyChangeCurrentStock}
               value={this.state.currency}
             >
               <option value="USD">USD</option>
@@ -86,59 +120,59 @@ class Dashboard extends React.Component {
               <option value="USDT">Tether</option>
             </select>
           </div>
-          <br></br>
           <br></br>
           <button className="btn btn-outline-primary">Buy</button>
           <br></br>
-          <br></br>
           <button className="btn btn-outline-primary">Sell</button>
+          <br></br>
+          <button className="btn" onClick={e => this.setState({ stockData: null })}>👈</button>
           {/* <App /> */}
         </div>
       );
+    } else {
+      return (
+        <div className="Dashboard">
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+            onSubmit={this.onSubmit}
+          >
+            <div className="form-group">
+              <label htmlFor="symbol">Symbol (ie. GOOGL)</label>
+              <input
+                style={{ width: "250px" }}
+                type="symbol"
+                className="form-control"
+                id="symbol"
+                onChange={this.onSymbolChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="currency">Currency</label>
+              <select
+                style={{ width: "250px" }}
+                className="form-control"
+                id="currency"
+                onChange={this.onCurrencyChange}
+                value={this.state.currency}
+              >
+                <option value="USD">USD</option>
+                <option value="BTC">Bitcoin</option>
+                <option value="ETH">Ethereum</option>
+                <option value="DAI">Dai</option>
+                <option value="USDT">Tether</option>
+              </select>
+            </div>
+            <button className="btn btn-outline-primary">Search</button>
+            {/* <App /> */}
+          </form>
+          {stockview}
+        </div>
+      );
     }
-
-    return (
-      <div className="Dashboard">
-        <form
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-          onSubmit={this.onSubmit}
-        >
-          <div className="form-group">
-            <label htmlFor="symbol">Symbol (ie. GOOGL)</label>
-            <input
-              style={{ width: "250px" }}
-              type="symbol"
-              className="form-control"
-              id="symbol"
-              onChange={this.onSymbolChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="currency">Currency</label>
-            <select
-              style={{ width: "250px" }}
-              className="form-control"
-              id="currency"
-              onChange={this.onCurrencyChange}
-              value={this.state.currency}
-            >
-              <option value="USD">USD</option>
-              <option value="BTC">Bitcoin</option>
-              <option value="ETH">Ethereum</option>
-              <option value="DAI">Dai</option>
-              <option value="USDT">Tether</option>
-            </select>
-          </div>
-          <button className="btn btn-outline-primary">Search</button>
-          {/* <App /> */}
-        </form>
-        {stockview}
-      </div>
-    );
   }
 }
 

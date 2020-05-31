@@ -1,4 +1,6 @@
 import React from 'react';
+import '../css/StockCard.css';
+
 class StockCard extends React.Component {
 
   constructor(props) {
@@ -6,6 +8,8 @@ class StockCard extends React.Component {
   }
 
   render() {
+    console.log(this.props.stockData);
+
     let stockData = this.props.stockData;
     let symbol;
     let price;
@@ -31,6 +35,10 @@ class StockCard extends React.Component {
       change = change / exchangeRate;
       displayCurrency = currency;
 
+      // round to 2 significant figures
+      price = parseFloat(price.toPrecision(4));
+      change = parseFloat(change.toPrecision(4));
+
     } else {
       stockData = stockData["Global Quote"];
       const objKeys = Object.keys(stockData);
@@ -40,7 +48,7 @@ class StockCard extends React.Component {
       change = stockData[objKeys[8]];
       changePercent = stockData[objKeys[9]];
 
-      // round currency
+      // round USD to cents
       price = Math.round(price * 100) / 100;
       change = Math.round(change * 100) / 100;
     }
@@ -50,12 +58,24 @@ class StockCard extends React.Component {
 
     return (
       <div className="StockCard">
-        <p style={{ marginTop: '10px', fontWeight: 'bold' }}>
+        <p style={{ marginTop: '10px', fontWeight: 'bold', marginBottom: '0px' }}>
           {`${symbol}`}
         </p>
-        <p>{`${price} ${displayCurrency}`}</p>
-        <p style={{ color: color }}>{change} ({changePercent})</p>
-      </div>
+        <p className="Currency" style={{
+          fontSize: "12px",
+          color: "rgba(0,0,0,0.5)"
+        }}>
+          ({displayCurrency})
+        </p>
+        <p>{`${price} \t`}
+          <span style={{
+            color: color,
+            fontSize: "16px",
+          }}>
+            {change} ({changePercent})
+          </span>
+        </p>
+      </div >
     );
   }
 }
