@@ -7,18 +7,37 @@ class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { symbol: '', stockData: null };
+    this.state = { symbol: '', currency: 'USD', stockData: null };
   }
 
   onSubmit = (e) => {
     e.preventDefault();
 
     const symbol = this.state.symbol;
+    const currency = this.state.currency;
+
     if (symbol !== "") {
 
+      // get stock data in USD
       alpha.data.quote(symbol)
-        .then(data => {
-          this.setState({ stockData: data });
+        .then(quoteData => {
+
+          // perform currency conversion if needed
+          if (currency !== 'USD') {
+            alpha.forex.rate(currency, 'USD').then(exchangeData => {
+              const exchangeRate = Number(exchangeData["Realtime Currency Exchange Rate"]["5. Exchange Rate"]);
+
+              const stockDataWithAltCurrency = {
+                altCurrency: { currency, exchangeRate },
+                quote: quoteData
+              }
+
+              this.setState({ stockData: stockDataWithAltCurrency });
+            });
+          } else {
+            this.setState({ stockData: quoteData });
+          }
+
         })
         .catch(err => {
           this.setState({ stockData: 'err' });
@@ -29,6 +48,10 @@ class Dashboard extends React.Component {
 
   onSymbolChange = (e) => {
     this.setState({ symbol: e.target.value });
+  }
+
+  onCurrencyChange = (e) => {
+    this.setState({ currency: e.target.value });
   }
 
   render() {
@@ -45,10 +68,20 @@ class Dashboard extends React.Component {
 
     return (
       <div className="Dashboard">
-        <form onSubmit={this.onSubmit}>
+        <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={this.onSubmit}>
           <div className="form-group">
             <label htmlFor="symbol">Symbol (ie. GOOGL)</label>
-            <input type="symbol" className="form-control" id="symbol" onChange={this.onSymbolChange} />
+            <input style={{ width: '250px' }} type="symbol" className="form-control" id="symbol" onChange={this.onSymbolChange} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="currency">Currency</label>
+            <select style={{ width: '250px' }} className="form-control" id="currency" onChange={this.onCurrencyChange} value={this.state.currency}>
+              <option value="USD">USD</option>
+              <option value="BTC">Bitcoin</option>
+              <option value="ETH">Ethereum</option>
+              <option value="DAI">Dai</option>
+              <option value="USDT">Tether</option>
+            </select>
           </div>
           <button className="btn btn-outline-primary">Search</button>
         </form>
