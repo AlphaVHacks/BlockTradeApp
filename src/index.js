@@ -10,7 +10,6 @@ import "bootstrap/dist/css/bootstrap.css";
 ReactDOM.render(
   <BrowserRouter>
     <App />
-    <App2 />
   </BrowserRouter>,
   document.getElementById("root")
 );
