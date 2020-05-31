@@ -17,7 +17,7 @@ class Login extends React.Component {
       const email = this.state.email;
       const hashedPassword = sha256(this.state.password);
 
-      fetch('http://localhost:5000/users')
+      fetch('https://blocktrade-api.herokuapp.com/users')
         .then(res => {
           if (res.ok) return res.json();
           else console.log(res);

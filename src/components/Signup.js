@@ -20,7 +20,7 @@ class Signup extends React.Component {
       const publicKey = this.state.publicKey;
 
       // check if email or publicKey is already in the DB
-      fetch('http://localhost:5000/users')
+      fetch('https://blocktrade-api.herokuapp.com/users')
         .then(res => {
           if (res.ok) return res.json();
           else console.log(res);
@@ -35,7 +35,7 @@ class Signup extends React.Component {
             // create a new account
             const newUser = { name, email, password, publicKey }
 
-            fetch('http://localhost:5000/users/add', {
+            fetch('https://blocktrade-api.herokuapp.com/users/add', {
               method: 'POST',
               mode: 'cors',
               cache: 'no-cache',
