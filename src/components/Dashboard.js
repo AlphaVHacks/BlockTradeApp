@@ -68,11 +68,28 @@ class Dashboard extends React.Component {
       return (
         <div>
           <div style={{ border: "black" }}>{stockview}</div>
-
+          <div>
+            <select
+              style={{ width: "250px" }}
+              className="form-control"
+              id="currency"
+              onChange={this.onCurrencyChange}
+              value={this.state.currency}
+            >
+              <option value="USD">USD</option>
+              <option value="BTC">Bitcoin</option>
+              <option value="ETH">Ethereum</option>
+              <option value="DAI">Dai</option>
+              <option value="USDT">Tether</option>
+            </select>
+          </div>
+          <br></br>
+          <br></br>
           <button className="btn btn-outline-primary">Buy</button>
           <br></br>
           <br></br>
           <button className="btn btn-outline-primary">Sell</button>
+          {/* <App /> */}
         </div>
       );
     }
@@ -114,7 +131,7 @@ class Dashboard extends React.Component {
             </select>
           </div>
           <button className="btn btn-outline-primary">Search</button>
-          <App />
+          {/* <App /> */}
         </form>
         {stockview}
       </div>
