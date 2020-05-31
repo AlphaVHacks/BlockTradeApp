@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 const sha256 = require('sha256');
 
 class Login extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
+    this.state = { email: '', password: '', toDashboard: false };
   }
 
   onSubmit = (e) => {
@@ -32,6 +32,7 @@ class Login extends React.Component {
               console.log(user);
 
               // REDIRECT TO DASHBOARD
+              this.setState({ toDashboard: true });
 
             } else {
               // prompt wrong password
@@ -57,6 +58,10 @@ class Login extends React.Component {
   }
 
   render() {
+    if (this.state.toDashboard) {
+      return <Redirect to="/dashboard" />
+    }
+
     return (
       <div className="Login">
         <form onSubmit={this.onSubmit}>

@@ -3,10 +3,12 @@ import { Link, Route, Switch } from 'react-router-dom';
 
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Dashboard from './components/Dashboard';
 import logo from './img/logo.png';
 import './css/App.css';
 
 function App() {
+
   return (
     <div className="App">
       <div id="wrapper" className=" container d-flex justify-content-center align-items-center">
@@ -14,6 +16,7 @@ function App() {
           <img id="logo" src={logo} />
           <Route component={Login} exact path='/' />
           <Route component={Signup} exact path='/signup' />
+          <Route component={Dashboard} exact path='/dashboard' />
         </div>
       </div>
     </div>

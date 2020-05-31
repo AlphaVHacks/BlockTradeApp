@@ -53,6 +53,7 @@ class Signup extends React.Component {
                   console.log(newUser);
 
                   // REDIRECT TO DASHBOARD
+                  this.setState({ toDashboard: true });
 
                 } else {
                   alert('server error - failed to create user');
@@ -75,9 +76,9 @@ class Signup extends React.Component {
   }
 
   render() {
-    // if (this.state.toDashboard === true) {
-    //   return <Redirect to='/' />
-    // }
+    if (this.state.toDashboard) {
+      return <Redirect to="/dashboard" />
+    }
 
     return (
       <div className="Signup" >
