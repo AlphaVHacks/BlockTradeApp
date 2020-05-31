@@ -66,7 +66,8 @@ class Dashboard extends React.Component {
       stockview = <StockCard stockData={stockData} />;
       return (
         <div>
-          {stockview}
+          <div>{stockview}</div>
+
           <button className="btn btn-outline-primary">Buy</button>
           <br></br>
           <br></br>
