@@ -7,7 +7,12 @@ const alpha = require("alphavantage")({ key: "AJC1VXSOOGI1OS2K" });
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { symbol: "", currency: "USD", stockData: null, showWallet: false };
+    this.state = {
+      symbol: "",
+      currency: "USD",
+      stockData: null,
+      showWallet: false,
+    };
   }
 
   onSubmit = (e) => {
@@ -21,12 +26,12 @@ class Dashboard extends React.Component {
       alpha.data
         .quote(symbol)
         .then((quoteData) => {
-          // perform currency conversion if needed
+          // perform currency conversion if needed using the Alpha API
           if (currency !== "USD") {
             alpha.forex.rate(currency, "USD").then((exchangeData) => {
               const exchangeRate = Number(
                 exchangeData["Realtime Currency Exchange Rate"][
-                "5. Exchange Rate"
+                  "5. Exchange Rate"
                 ]
               );
 
@@ -62,9 +67,7 @@ class Dashboard extends React.Component {
     if (currency !== "USD") {
       alpha.forex.rate(currency, "USD").then((exchangeData) => {
         const exchangeRate = Number(
-          exchangeData["Realtime Currency Exchange Rate"][
-          "5. Exchange Rate"
-          ]
+          exchangeData["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
         );
 
         const currentStockData = this.state.stockData;
@@ -72,19 +75,22 @@ class Dashboard extends React.Component {
         if (currentStockData.altCurrency) {
           newStockData = {
             altCurrency: { currency, exchangeRate },
-            quote: currentStockData.quote
+            quote: currentStockData.quote,
           };
         } else {
           newStockData = {
             altCurrency: { currency, exchangeRate },
-            quote: currentStockData
-          }
+            quote: currentStockData,
+          };
         }
 
         this.setState({ stockData: newStockData, currency: currency });
       });
     } else {
-      this.setState({ stockData: this.state.stockData.quote, currency: e.target.value });
+      this.setState({
+        stockData: this.state.stockData.quote,
+        currency: e.target.value,
+      });
     }
   };
 
@@ -100,15 +106,17 @@ class Dashboard extends React.Component {
       let wallet;
 
       if (this.state.showWallet) {
-        wallet = <App />
+        wallet = <App />;
       }
 
       return (
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           {stockview}
           <br></br>
           <div>
@@ -128,11 +136,26 @@ class Dashboard extends React.Component {
           </div>
           <br></br>
           {wallet}
-          <button className="btn btn-outline-primary" onClick={(e) => this.setState({ showWallet: true })}>Buy</button>
+          <button
+            className="btn btn-outline-primary"
+            onClick={(e) => this.setState({ showWallet: true })}
+          >
+            Buy
+          </button>
           <br></br>
-          <button className="btn btn-outline-primary" onClick={(e) => this.setState({ showWallet: true })}>Sell</button>
+          <button
+            className="btn btn-outline-primary"
+            onClick={(e) => this.setState({ showWallet: true })}
+          >
+            Sell
+          </button>
           <br></br>
-          <button className="btn" onClick={e => this.setState({ stockData: null })}>👈</button>
+          <button
+            className="btn"
+            onClick={(e) => this.setState({ stockData: null })}
+          >
+            👈
+          </button>
         </div>
       );
     } else {
